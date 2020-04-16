@@ -46,7 +46,8 @@ const authLink = setContext(
  WebSocketの作成 subscription用
  */
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000`,
+//  uri: `ws://localhost:4000`,
+  uri: `ws://morning-sands-20248.herokuapp.com/`,
   options: {
     reconnect: true,
     connectionParams: {
