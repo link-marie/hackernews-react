@@ -47,7 +47,7 @@ const authLink = setContext(
  */
 const wsLink = new WebSocketLink({
 //  uri: `ws://localhost:4000`,
-  uri: `ws://morning-sands-20248.herokuapp.com/`,
+  uri: `wss://morning-sands-20248.herokuapp.com/`,
   options: {
     reconnect: true,
     connectionParams: {
