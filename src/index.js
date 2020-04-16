@@ -77,7 +77,7 @@ const link = split (
 // link : server接続先(authorization token付き)を指定
 // cache: 正規化(冗長部分を除いた)キャッシュ機能指定で高速化
 const client = new ApolloClient({
-  link: link,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 })
 
