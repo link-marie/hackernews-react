@@ -150,7 +150,7 @@ class LinkList extends Component {
   /**
    Vote/Unvote 実行後の 内部Cacheの update
    */
-  _updateCacheAfterVote1 = (store, remote, linkId) => {
+  _updateCacheAfterVote1 = (store, votes, linkId) => {
 
     const isNewPage = this.props.location.pathname.includes('new')
     const page = parseInt(this.props.match.params.page, 10)
@@ -168,7 +168,7 @@ class LinkList extends Component {
     // 指定されたIDの linkを得る
     const localLink = localData.feed.links.find(link => link.id === linkId)
     // 内部Vote情報を更新
-    localLink.votes = remote.link.votes
+    localLink.votes = votes
     // 内部Cacheを更新
     store.writeQuery({
       query: FEED_QUERY,

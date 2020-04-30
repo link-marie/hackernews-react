@@ -26,11 +26,26 @@ const VOTE_MUTATION = gql`
   }
 `
 
+const UNVOTE_MUTATION = gql`
+  mutation UnvoteMutation($linkId: ID!, $voteId: ID!) {
+    unvote(linkId: $linkId, voteId: $voteId) {
+      id
+      votes{
+        id
+        user {
+          id
+        }
+      }
+    }
+  }
+`
+
 class Link extends Component {
 
   render() {
 
     const authToken = localStorage.getItem(AUTH_TOKEN)
+    const myVoteId = this.isMyVote()
 
     const MutationVote = (props) => {
       return (
@@ -43,8 +58,8 @@ class Link extends Component {
           // Serverが応答を返した直後に呼び出される
           // store: 現在のキャッシュ
           // data: mutation成果
-          update={(store, {data: {vote}}) =>
-            this.props.updateStoreAfterVote(store, vote, this.props.link.id)
+          update={(store, { data: { vote }}) =>
+            this.props.updateStoreAfterVote(store, vote.link.votes, this.props.link.id)
           }
         >
           { /* RenderPropFunction の定義 
@@ -57,12 +72,32 @@ class Link extends Component {
           )}
         </Mutation>
       )
+    }
 
+    const MutationUnvote = (props) => {
+      return (
+        <Mutation 
+        mutation={UNVOTE_MUTATION}
+        variables={{linkId: this.props.link.id, voteId: myVoteId}}
+        update={(store, { data: { unvote }}) =>
+          this.props.updateStoreAfterVote(store, unvote.votes, this.props.link.id)
+        }
+        >
+        {unvoteMutation => (
+          <div className="ml1 gray f11" onClick={unvoteMutation}>
+            ▼
+          </div>
+        )}
+      </Mutation>
+      )
     }
 
     function ButtonVote() {
       if( !authToken) {
         return ""
+      }
+      if( myVoteId){
+        return <MutationUnvote></MutationUnvote>
       }
       return <MutationVote />
     }
@@ -112,6 +147,23 @@ class Link extends Component {
     // console.log(" test01: " + idx)
   }
 
+  isMyVote() {
+    const votes = this.props.link.votes
+    const userId = localStorage.getItem(USER_ID)
+
+   let voteId = null
+   for( var i = 0; i < votes.length; i++){
+     let vote = votes[ i]
+     let user = vote.user
+     if( user){
+      if( userId === user.id){
+        voteId = vote.id
+      }
+    }
+   }
+
+    return voteId
+  }
 }
 
 export default Link
