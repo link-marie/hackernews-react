@@ -49,8 +49,8 @@ class Link extends Component {
               // Serverが応答を返した直後に呼び出される
               // store: 現在のキャッシュ
               // data: mutation成果
-              update={(store, {data: {result}}) =>
-                this.props.updateStoreAfterVote(store, result, this.props.link.id)
+              update={(store, {data: {vote}}) =>
+                this.props.updateStoreAfterVote(store, vote, this.props.link.id)
               }
               >
               { /* RenderPropFunction の定義 
