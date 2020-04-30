@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { AUTH_TOKEN } from '../constants'
+import { AUTH_TOKEN, USER_ID } from '../constants'
 import { timeDifferenceForDate } from '../utils'
 
 // Vote実行
@@ -32,6 +32,41 @@ class Link extends Component {
 
     const authToken = localStorage.getItem(AUTH_TOKEN)
 
+    const MutationVote = (props) => {
+      return (
+        <Mutation
+          // GraphQL AST
+          mutation={VOTE_MUTATION}
+
+          // GraphQLの変数
+          variables={{linkId: this.props.link.id}}
+          // Serverが応答を返した直後に呼び出される
+          // store: 現在のキャッシュ
+          // data: mutation成果
+          update={(store, {data: {vote}}) =>
+            this.props.updateStoreAfterVote(store, vote, this.props.link.id)
+          }
+        >
+          { /* RenderPropFunction の定義 
+            clickで関数を呼び出せるようにする
+          */}
+          {voteMutation => (
+            <div className="ml1 gray f11" onClick={voteMutation}>
+              ▲
+            </div>
+          )}
+        </Mutation>
+      )
+
+    }
+
+    function ButtonVote() {
+      if( !authToken) {
+        return ""
+      }
+      return <MutationVote />
+    }
+
     return (
       <div className="flex mt2 items-start">
         <div className="flex items-center">
@@ -40,31 +75,9 @@ class Link extends Component {
           <span className="gray">{this.props.index + 1}.</span>
 
           { /* Vote button */}
-          {authToken && (
-            <Mutation 
-              // GraphQL AST
-              mutation={VOTE_MUTATION}
-              // GraphQLの変数
-              variables={{linkId: this.props.link.id}}
-              // Serverが応答を返した直後に呼び出される
-              // store: 現在のキャッシュ
-              // data: mutation成果
-              update={(store, {data: {vote}}) =>
-                this.props.updateStoreAfterVote(store, vote, this.props.link.id)
-              }
-              >
-              { /* RenderPropFunction の定義 
-                clickで関数を呼び出せるようにする
-              */}
-              {voteMutation => (
-                <div className="ml1 gray f11" onClick={voteMutation}>
-                  ▲
-                </div>
-              )}
-            </Mutation>
-
-          )}
+          <ButtonVote />
         </div>
+
         <div className="ml1">
 
           {/* Link情報 */}
