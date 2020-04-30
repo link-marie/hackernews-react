@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
+
 import Link from './Link'
 
 const FEED_SEARCH_QUERY = gql`
@@ -32,7 +33,7 @@ class Search extends Component {
     // 検索結果
     links: [],
     // 検索語
-    filter: ''
+    filter: '',
   }
 
   render() {
@@ -53,7 +54,7 @@ class Search extends Component {
         {this.state.links.map((link, index) => (
           <Link
             key={link.id}
-            link={link} 
+            link={link}
             index={index} />
         ))}
 
