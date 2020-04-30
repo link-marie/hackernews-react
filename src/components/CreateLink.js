@@ -27,6 +27,7 @@ class CreateLink extends Component {
   render() {
     // 内部 state
     const { description, url } = this.state
+
     return (
       // 投稿入力領域
       <div>
@@ -50,7 +51,7 @@ class CreateLink extends Component {
         {/* 
           POST_MUTATIONを prop 'mutation' として <Mutation />に与える 
         */}
-        <Mutation 
+        <Mutation
           // GraphQL AST or DocumentNode
           mutation={POST_MUTATION} 
           // 変数
@@ -65,7 +66,7 @@ class CreateLink extends Component {
           }}
 
           // Mutationが成功した時に実行する処理
-          onCompleted={ 
+          onCompleted={
             () => {
               this.postCompleted()
             }
@@ -86,7 +87,7 @@ class CreateLink extends Component {
     )
   }
 
-  postUpdate(store, post){
+  postUpdate(store, post) {
 
     const first = LINKS_PER_PAGE
     const skip = 0
@@ -109,7 +110,7 @@ class CreateLink extends Component {
     // console.log('post update')
   }
 
-  postCompleted(){
+  postCompleted() {
     this.props.history.push('/new/1')
     // console.log('postCompleted')
   }
