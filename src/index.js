@@ -1,21 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './styles/index.css'
-import App from './components/App'
-import * as serviceWorker from './serviceWorker';
+import gql from "graphql-tag"
 
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { BrowserRouter } from 'react-router-dom'
-
 import { setContext } from 'apollo-link-context'
-import { AUTH_TOKEN } from './constants'
 
 import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
+
+import './styles/index.css'
+import { AUTH_TOKEN } from './constants'
+import App from './components/App'
+import * as serviceWorker from './serviceWorker';
+
+const endPoint = "morning-sands-20248.herokuapp.com"
+//  uri: 'http://localhost:4000'
 
 /*
 ApolloLinkの作成
@@ -23,8 +27,7 @@ ApolloClinetは これを通して ServerのGraphQL API に接続する
 Serverの uri は以下のとおり
 */
 const httpLink = createHttpLink({
-//  uri: 'http://localhost:4000'
-  uri: 'https://morning-sands-20248.herokuapp.com/'
+  uri: 'https://' + endPoint + '/',
 })
 
 /*
@@ -46,8 +49,7 @@ const authLink = setContext(
  WebSocketの作成 subscription用
  */
 const wsLink = new WebSocketLink({
-//  uri: `ws://localhost:4000`,
-  uri: `wss://morning-sands-20248.herokuapp.com/`,
+  uri: 'wss://' + endPoint + '/',
   options: {
     reconnect: true,
     connectionParams: {
@@ -72,14 +74,33 @@ const link = split (
   authLink.concat(httpLink)
 )
 
-
 // ApolloClientの生成
 // link : server接続先(authorization token付き)を指定
 // cache: 正規化(冗長部分を除いた)キャッシュ機能指定で高速化
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  link,
+  cache: new InMemoryCache(),
+  onError: ({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+      console.log(graphQLErrors.toString())
+    }
+    if (networkError) {
+      console.log(networkError.toString())
+    }
+  }
 })
+
+const query = gql`
+  {
+    info
+  }
+`
+
+client
+  .query({
+    query
+  })
+  .then(result => console.log(result));
 
 /*
 propとして clientを指定し
@@ -96,4 +117,7 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
