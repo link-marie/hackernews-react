@@ -266,7 +266,7 @@ class LinkList extends Component {
   _getLinksToRender = data => {
     // 新規投稿ページか
     const isNewPage = this.props.location.pathname.includes('new')
-    if (isNewPage) {
+    if( isNewPage) {
       // linkデータをそのまま参照
       return data.feed.links
     }
@@ -285,7 +285,7 @@ class LinkList extends Component {
     // 現在のページ番号を得る
     const page = parseInt(this.props.match.params.page, 10)
     // 次のページがある?
-    if (page <= data.feed.count / LINKS_PER_PAGE) {
+    if( page <= data.feed.count / LINKS_PER_PAGE) {
       // 次のページを設定
       const nextPage = page + 1
       // Routeを指定
@@ -300,7 +300,7 @@ class LinkList extends Component {
     // 現在のページ番号を得る
     const page = parseInt(this.props.match.params.page, 10)
     // 前のページがある?
-    if (page > 1) {
+    if( page > 1) {
       // 前のページを設定
       const previousPage = page - 1
       // Routeを指定
