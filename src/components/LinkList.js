@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import Link from './Link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import Link from './Link'
 import { LINKS_PER_PAGE } from '../constants'
 
 // GraphQL queryを gqlで GraphQL ASTへ変換
@@ -87,7 +87,8 @@ class LinkList extends Component {
       // FEED_QUERYを propsとして指定
       <Query
         query={FEED_QUERY}
-        variables={this._getQueryVariables()}>
+        variables={this._getQueryVariables()}
+      >
         { /* 
         RenderPropFunctionの定義。 
         FEED_QUERYの結果がこの関数に渡される。
@@ -127,12 +128,16 @@ class LinkList extends Component {
               {isNewPage && (
                 /** Navigation */
                 <div className="flex ml4 mv3 gray">
-                  <div className="pointer mr2" onClick={() => this._previousPage()}>
+                  <div className="pointer mr2"
+                    onClick={() => this._previousPage()}
+                  >
                     Previous
-                    </div>
-                  <div className="pointer" onClick={() => this._nextPage(data)}>
+                  </div>
+                  <div className="pointer mr2"
+                    onClick={() => this._nextPage(data)}
+                  >
                     Next
-                    </div>
+                  </div>
                 </div>
               )}
             </Fragment>
@@ -145,7 +150,7 @@ class LinkList extends Component {
   /**
    Vote/Unvote 実行後の 内部Cacheの update
    */
-  _updateCacheAfterVote1 = (store, votes, linkId) => {
+  _updateCacheAfterVote1 = (store, remote, linkId) => {
 
     const isNewPage = this.props.location.pathname.includes('new')
     const page = parseInt(this.props.match.params.page, 10)
@@ -163,14 +168,13 @@ class LinkList extends Component {
     // 指定されたIDの linkを得る
     const localLink = localData.feed.links.find(link => link.id === linkId)
     // 内部Vote情報を更新
-    localLink.votes = votes
+    localLink.votes = remote.link.votes
     // 内部Cacheを更新
     store.writeQuery({
       query: FEED_QUERY,
       data: localData
     })
   }
-
 
   /**
    * 新しい投稿が行われた時、Client上で自動更新されるようにする
@@ -199,9 +203,9 @@ class LinkList extends Component {
         // すでに登録済み?
         const exists = prev.feed.links.find(({ id }) =>
           id === newLink.id
-        );
+        )
         // 登録済みなら そのまま前のデータを戻す
-        if (exists) return prev;
+        if (exists) return prev
 
         // 元と新データを 複製統合して、結果を戻す
         return Object.assign({}, prev, {
