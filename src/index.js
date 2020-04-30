@@ -35,7 +35,7 @@ ApolloLinkの作成
 与えられた contextを展開し、authorization tokenを付け加える
 */
 const authLink = setContext(
-  (request, { orgContext }) => {
+  (_, { orgContext }) => {
   const token = localStorage.getItem(AUTH_TOKEN)
   return {
     headers: {
