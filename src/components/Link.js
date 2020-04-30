@@ -72,7 +72,11 @@ class Link extends Component {
         <div className="flex items-center">
 
           { /* Index */}
-          <span className="gray">{this.props.index + 1}.</span>
+          <span className="gray"
+             onClick={this.test01(this.props.index + 1)} 
+          >
+            {this.props.index + 1}.
+          </span>
 
           { /* Vote button */}
           <ButtonVote />
@@ -103,6 +107,11 @@ class Link extends Component {
       </div>
     )
   }
+
+  test01(idx) {
+    // console.log(" test01: " + idx)
+  }
+
 }
 
 export default Link
