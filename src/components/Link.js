@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { AUTH_TOKEN, USER_ID } from '../constants'
-import { timeDifferenceForDate } from '../utils'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+
+import { AUTH_TOKEN, USER_ID } from '../constants'
+import { timeDifferenceForDate } from '../utils'
 
 // Vote実行
 const VOTE_MUTATION = gql`

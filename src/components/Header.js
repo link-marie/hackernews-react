@@ -6,6 +6,7 @@ import { AUTH_TOKEN } from '../constants'
 // 画面切り替えボタンを配置する画面ヘッダー領域
 // それぞれの routeに linkする
 class Header extends Component {
+
   render() {
     // 内部メモリよりtoken読み込み
     const authToken = localStorage.getItem(AUTH_TOKEN)
@@ -13,7 +14,7 @@ class Header extends Component {
     return (
       <div className="flex pa1 justify-between nowrap orange">
         <div className="flex flex-fixed black">
-          <div className="fw7 mr1">Hacker News</div>
+          <div className="fw7 mr1">HackerNews</div>
 
           {/* 新規投稿ページ */}
           <Link to="/" className="ml1 no-underline black">
